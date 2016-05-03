@@ -64,7 +64,7 @@ timeUnit printTimeStamp(char* color){
 void parallelBegin(ompt_task_id_t parent_task_id, ompt_frame_t *parent_task_frame, ompt_parallel_id_t parallel_id, uint32_t requested_team_size, void *parallel_function){
 mtx.lock();
 timeUnit parallelStamp = printTimeStamp("\x1B[31m");
-printf("%s %d\n", " Parallel region has began ID", parallel_id);
+printf("%s %d\n", "Event:ParallelBegin ParallelID", parallel_id);
 printf(BLACK);
 mtx.unlock();
 }
@@ -72,7 +72,7 @@ mtx.unlock();
 void parallelEnd(ompt_parallel_id_t parallel_id, ompt_task_id_t taskid){
 mtx.lock();
 timeUnit parallelEnd = printTimeStamp("\x1B[31m");
-printf("%s %d\n", "Parallel Region Ending with ID:", parallel_id);
+printf("%s %d\n", "Event:ParallelEnd ParallelID:", parallel_id);
 printf(BLACK);
 mtx.unlock();
 }
@@ -83,13 +83,13 @@ mtx.lock();
 	int worker = 2;
 timeUnit timestamp = printTimeStamp("\x1B[34m");
 	if((long unsigned int)thread_id == master){
-		printf("%s %d %s\n", "Thread", omp_get_thread_num(), "begun, This is the MASTER THREAD");
+		printf("%s %d %s\n", "Thread", omp_get_thread_num(), "Event:ThreadStart, MASTER THREAD");
 	}
 	else if ((long unsigned int)thread_id == worker ){
-		printf("%s %d %s\n", "Thread", omp_get_thread_num(), "begun, This is a WORKER THREAD");
+		printf("%s %d %s\n", "Thread", omp_get_thread_num(), "Event:ThreadStart, WORKER THREAD");
 	}
 	else{
-		printf("%s %d %s\n", "Thread", omp_get_thread_num(), "begun, This is a thread of type OTHER");
+		printf("%s %d %s\n", "Thread", omp_get_thread_num(), "Event:ThreadStart, type OTHER");
 	}
 printf(BLACK);
 mtx.unlock();
@@ -98,7 +98,7 @@ mtx.unlock();
 void threadEnd(ompt_thread_id_t thread_id){
 mtx.lock();
 timeUnit timestamp = printTimeStamp("\x1B[34m");
-printf("%s %d %s \n", "Thread", omp_get_thread_num(), "has ended");
+printf("%s %d %s \n", "Thread", omp_get_thread_num(), "Event:ThreadEnd");
 printf(BLACK);
 mtx.unlock();
 }
@@ -108,7 +108,7 @@ mtx.unlock();
 void taskBegin(ompt_task_id_t parent_task_id, ompt_frame_t *parent_task_frame, ompt_task_id_t new_task_id,void *new_task_function){
 mtx.lock();
 timeUnit timestamp = printTimeStamp("\x1B[32m");
-printf("%s %d %s\n", " Task with ID", new_task_id, "has begun");
+printf("%s %d %s\n", "Task with ID", new_task_id, "Event:TaskBegin");
 printf(BLACK);
 mtx.unlock();
 }
@@ -116,7 +116,7 @@ mtx.unlock();
 void taskEnd(ompt_task_id_t task_id){
 mtx.lock();
 timeUnit timestamp = printTimeStamp("\x1B[32m"); 
-printf("%s %d %s\n", " Task with ID", task_id, "has ended.");
+printf("%s %d %s\n", "Task with ID", task_id, "Event:TaskEnd");
 printf(BLACK);
 mtx.unlock();
 }
@@ -124,7 +124,7 @@ mtx.unlock();
 void idleBegin(ompt_thread_id_t thread_id){
 mtx.lock();
 printTimeStamp("\x1B[35m");
-printf("%s %d %s \n", "Thread number", omp_get_thread_num(), "is in idle state");
+printf("%s %d %s \n", "Thread ", omp_get_thread_num(), "Event:IdleBegin");
 printf(BLACK);
 mtx.unlock();
 }
@@ -132,7 +132,7 @@ mtx.unlock();
 void idleEnd(ompt_thread_id_t thread_id){
 mtx.lock();
 printTimeStamp("\x1B[35m");
-printf("%s %d %s \n", "Thread number", omp_get_thread_num(), "has exited idle state");
+printf("%s %d %s \n", "Thread ", omp_get_thread_num(), "Event:IdleEnd");
 printf(BLACK);
 mtx.unlock();
 }
@@ -141,7 +141,7 @@ mtx.unlock();
 void taskwaitBegin(ompt_task_id_t parent_task_id, ompt_frame_t *parent_task_frame, ompt_task_id_t new_task_id, void *new_task_function){
 mtx.lock();
 printTimeStamp("\x1B[35m");
-printf("%s %d %s \n", "Thread", omp_get_thread_num(), "TASKWAITBEGIN FUNCTION");
+printf("%s %d %s \n", "Thread", omp_get_thread_num(), "Event:TaskWaitBegin");
 printf(BLACK);
 mtx.unlock();
 }
@@ -149,7 +149,7 @@ mtx.unlock();
 void taskwaitEnd(ompt_task_callback_t taskCallback){
 mtx.lock();
 printTimeStamp("\x1B[35m");
-printf("%s %d %s \n", "Thread", omp_get_thread_num(), "TASKWAITEND FUNCTION");
+printf("%s %d %s \n", "Thread", omp_get_thread_num(), "Event:TaskWaitEnd");
 printf(BLACK);
 mtx.unlock();
 }
@@ -158,14 +158,14 @@ mtx.unlock();
 void taskgroupwaitBegin(ompt_parallel_id_t parallel_id, ompt_task_id_t task_id){
 mtx.lock();
 printTimeStamp("\x1B[35m");
-printf("%s %d %s \n", "Thread", omp_get_thread_num(), "TASKGROUPWAITBEGIN FUNCTION");
+printf("%s %d %s \n", "Thread", omp_get_thread_num(), "Event:TaskGroupBegin");
 printf(BLACK);
 mtx.unlock();
 }
 void taskgroupwaitEnd(ompt_parallel_id_t parallel_id, ompt_task_id_t task_id){
 mtx.lock();
 printTimeStamp("\x1B[35m");
-printf("%s %d %s \n", "Thread", omp_get_thread_num(), "TASKGROUPWAITEND FUNCTION");
+printf("%s %d %s \n", "Thread", omp_get_thread_num(), "Event:TaskGroupEnd");
 printf(BLACK);
 mtx.unlock();
 }
@@ -174,14 +174,14 @@ mtx.unlock();
 void barrierBegin(ompt_parallel_id_t parallel_id, ompt_task_id_t task_id){
 mtx.lock();
 printTimeStamp("\x1B[36m");
-printf("%s %d %s %d\n", "Thread", omp_get_thread_num(), "is waiting at a BARRIER, parallel region ID:",  parallel_id);
+printf("%s %d %s %d\n", "Thread", omp_get_thread_num(), "Event:BarrierBegin, parallel region ID:",  parallel_id);
 printf(BLACK);
 mtx.unlock();
 }
 void barrierEnd(ompt_parallel_id_t parallel_id, ompt_task_id_t task_id){
 mtx.lock();
 printTimeStamp("\x1B[36m");
-printf("%s %d %s %d\n", "Thread", omp_get_thread_num(), "has completed its BARRIER, parallel region ID:", parallel_id);
+printf("%s %d %s %d\n", "Thread", omp_get_thread_num(), "Event:BarrierEnd, parallel region ID:", parallel_id);
 printf(BLACK);
 mtx.unlock();
 }
@@ -191,21 +191,21 @@ void waitOrdered(ompt_wait_id_t waitId){
 mtx.lock();
 printTimeStamp("\x1B[36M");
 ompt_state_t currentState = ompt_get_state_fn(&waitId);
-printf("%s %d %s %d\n", "Thread", omp_get_thread_num(), "is currently waiting at an ordered construct. Current thread state is:", currentState);
+printf("%s %d %s %d\n", "Thread", omp_get_thread_num(), "Event:waitOrdered section. Current thread state is:", currentState);
 printf(BLACK);
 mtx.unlock();
 }
 void releaseOrdered(ompt_wait_id_t waitId){
 mtx.lock();
 printTimeStamp("\x1B[36M");
-printf("%s %d %s\n", "Thread", omp_get_thread_num(), "has exited ordered section");
+printf("%s %d %s\n", "Thread", omp_get_thread_num(), "Event:exitOrdered section");
 printf(BLACK);
 mtx.unlock();
 }
 void acquireOrdered(ompt_wait_id_t waitId){
 mtx.lock();
 printTimeStamp("\x1B[36M");
-printf("%s %d %s\n", "Thread", omp_get_thread_num(), "has entered an ordered section");
+printf("%s %d %s\n", "Thread", omp_get_thread_num(), "Event:startOrdered section");
 printf(BLACK);
 mtx.unlock();
 }
@@ -214,21 +214,21 @@ mtx.unlock();
 void waitCritical(ompt_wait_id_t waitId){
 mtx.lock();
 printTimeStamp("\x1B[31m");
-printf("%s %d %s %d\n", "Thread", omp_get_thread_num(), "has reached a critical section and is waiting to enter");
+printf("%s %d %s %d\n", "Thread", omp_get_thread_num(), "Event:waitCritical section");
 printf(BLACK);
 mtx.unlock();
 }
 void acquireCritical(ompt_wait_id_t waitId){
 mtx.lock();
 printTimeStamp("\x1B[31m");
-printf("%s %d %s \n", "Thread", omp_get_thread_num(), "has acquired a critical section");
+printf("%s %d %s \n", "Thread", omp_get_thread_num(), "Event:acquireCritical section");
 printf(BLACK);
 mtx.unlock();
 }
 void releaseCritical(ompt_wait_id_t waitId){
 mtx.lock();
 printTimeStamp("\x1B[31m");
-printf("%s %d %s \n", "Thread", omp_get_thread_num(), "has released a critical section");
+printf("%s %d %s \n", "Thread", omp_get_thread_num(), "Event:releaseCritical section");
 printf(BLACK);
 mtx.unlock();
 }
@@ -237,21 +237,21 @@ mtx.unlock();
 void waitAtomic(ompt_wait_id_t waitId){
 mtx.lock();
 printTimeStamp("\x1B[31m");
-printf("%s %d %s \n", "Thread", omp_get_thread_num(), "has reached an atomic section and is waiting to enter");
+printf("%s %d %s \n", "Thread", omp_get_thread_num(), "Event:waitAtomic");
 printf(BLACK);
 mtx.unlock();
 }
 void acquireAtomic(ompt_wait_id_t waitId){
 mtx.lock();
 printTimeStamp("\x1B[31m");
-printf("%s %d %s \n", "Thread", omp_get_thread_num(), "has acquired an atomic section");
+printf("%s %d %s \n", "Thread", omp_get_thread_num(), "Event:acquireAtomic");
 printf(BLACK);
 mtx.unlock();
 }
 void releaseAtomic(ompt_wait_id_t waitId){
 mtx.lock();
 printTimeStamp("\x1B[31m");
-printf("%s %d %s \n", "Thread", omp_get_thread_num(), "has released an atomic section");
+printf("%s %d %s \n", "Thread", omp_get_thread_num(), "Event:releaseAtomic");
 printf(BLACK);
 mtx.unlock();
 }
@@ -260,28 +260,28 @@ mtx.unlock();
 void waitLock(ompt_wait_id_t waitId){
 mtx.lock();
 printTimeStamp("\x1B[35m");
-printf("%s %d %s \n", "Thread", omp_get_thread_num(), "has reached a locked section and is waiting to enter");
+printf("%s %d %s \n", "Thread", omp_get_thread_num(), "Event:waitLock");
 printf(BLACK);
 mtx.unlock();
 }
 void waitfirstnestLock(ompt_wait_id_t waitId){
 mtx.lock();
 printTimeStamp("\x1B[35m");
-printf("%s %d %s \n", "Thread", waitId, "has reached a locked section and is waiting to enter");
+printf("%s %d %s \n", "Thread", waitId, "Event:waitNestLock");
 printf(BLACK);
 mtx.unlock();
 }
 void acquireLock(ompt_wait_id_t waitId){
 mtx.lock();
 printTimeStamp("\x1B[35m");
-printf("%s %d %s \n", "Thread", omp_get_thread_num(), "has acquired a lock");
+printf("%s %d %s \n", "Thread", omp_get_thread_num(), "Event:acquireLock");
 printf(BLACK);
 mtx.unlock();
 }
 void releaseLock(ompt_wait_id_t waitId){
 mtx.lock();
 printTimeStamp("\x1B[35m");
-printf("%s %d %s \n", "Thread", omp_get_thread_num(), "has released a lock section");
+printf("%s %d %s \n", "Thread", omp_get_thread_num(), "Event:releaseLock");
 printf(BLACK);
 mtx.unlock();
 }
@@ -467,4 +467,8 @@ int nthreads, tid;
 	return 0;
 }
 
+//regular expressions library/tool used for parsing text
+//graphing the same mostly
+//open file, read data per line, parse data , insert important info into list or dictionary
+//iterate thread lists 1 by 1 and plot accordingly with information.
 
