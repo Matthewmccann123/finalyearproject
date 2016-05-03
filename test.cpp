@@ -348,10 +348,10 @@ ompt_initialize(ompt_function_lookup_t lookup,
 	ompt_set_callback(ompt_event_release_ordered, (ompt_callback_t)releaseOrdered);
 
 	//ACQUIRE LOCK/CRITICAL/ATOMIC/ORDERED/NEST
-	ompt_set_callback(ompt_event_acquired_lock, (ompt_callback_t)waitLock);
+	ompt_set_callback(ompt_event_acquired_lock, (ompt_callback_t)acquireLock);
 	      //ompt_set_callback(ompt_event_acquired_nest_lock_first, (ompt_callback_t)acquirefirstnestLock);
-	ompt_set_callback(ompt_event_acquired_critical, (ompt_callback_t)waitCritical);
-	ompt_set_callback(ompt_event_acquired_atomic, (ompt_callback_t)waitAtomic);
+	ompt_set_callback(ompt_event_acquired_critical, (ompt_callback_t)acquireCritical);
+	ompt_set_callback(ompt_event_acquired_atomic, (ompt_callback_t)acquireAtomic);
 	ompt_set_callback(ompt_event_acquired_ordered, (ompt_callback_t)acquireOrdered);
 
 	
